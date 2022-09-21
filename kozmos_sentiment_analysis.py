@@ -42,3 +42,8 @@ df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in x.split() if x n
 
 # Lemmatization
 df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join([Word(word).lemmatize() for word in x.split()]))
+
+# Term Frequencies
+tf = df["REVIEW"].apply(lambda x: pd.value_counts(x.split(" "))).sum(axis=0).reset_index()
+tf.columns = ["words", "tf"]
+tf.sort_values("tf", ascending=False)

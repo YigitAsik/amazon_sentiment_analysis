@@ -1,5 +1,7 @@
 from warnings import filterwarnings
 import matplotlib.pyplot as plt
+from matplotlib.ticker import AutoMinorLocator
+import seaborn as sns
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -37,7 +39,7 @@ df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in str(x).split() i
 
 # Rare Words
 temp_df = pd.Series(' '.join(df["REVIEW"]).split()).value_counts()
-drops = temp_df[temp_df < 300]
+drops = temp_df[temp_df < 200]
 df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in x.split() if x not in drops))
 
 # Lemmatization
@@ -62,3 +64,27 @@ plt.figure()
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
 plt.show()
+
+fig = plt.figure(figsize=(9, 6))
+g = sns.barplot(data=tf.sort_values("tf", ascending=False)[0:10], x="words", y="tf", palette="viridis")
+g.set_title("Word frequencies")
+g.set_xlabel("Word")
+g.set_ylabel("Count")
+g.yaxis.set_minor_locator(AutoMinorLocator(5))
+g.tick_params(which="both", width=2)
+g.tick_params(which="major", length=6)
+g.tick_params(which="minor", length=4)
+plt.show()
+
+### Sentiment Analysis
+
+sia = SentimentIntensityAnalyzer()
+
+df["REVIEW"][0:10].apply(lambda x: sia.polarity_scores(x))
+df["REVIEW"][0:10].apply(lambda x: sia.polarity_scores(x)["compound"])
+
+# df["POLARITY_SCORE"] = df["REVIEW"].apply(lambda x: sia.polarity_scores(x)["compound"])
+
+## Binarizing the labels
+df["SENTIMENT_LABEL"] = df["REVIEW"].apply(lambda x: "pos" if sia.polarity_scores(x)["compound"] > 0 else "neg")
+

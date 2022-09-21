@@ -37,7 +37,7 @@ df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in str(x).split() i
 
 # Rare Words
 temp_df = pd.Series(' '.join(df["REVIEW"]).split()).value_counts()
-drops = temp_df[temp_df < 1000]
+drops = temp_df[temp_df < 300]
 df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in x.split() if x not in drops))
 
 # Lemmatization
@@ -47,3 +47,18 @@ df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join([Word(word).lemmatize() for
 tf = df["REVIEW"].apply(lambda x: pd.value_counts(x.split(" "))).sum(axis=0).reset_index()
 tf.columns = ["words", "tf"]
 tf.sort_values("tf", ascending=False)
+
+## Visualization
+text = " ".join(i for i in df.REVIEW)
+
+wordcloud = WordCloud().generate(text)
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()
+
+wordcloud = WordCloud(max_font_size=50,
+                      max_words=100).generate(text)
+plt.figure()
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()

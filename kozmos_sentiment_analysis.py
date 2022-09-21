@@ -23,3 +23,10 @@ df = amazon.copy()
 
 df.head()
 df.info()
+
+df.columns = [col.upper() for col in df.columns]
+df["REVIEW"] = df["REVIEW"].str.lower()
+
+# Getting rid of punctuations and digits
+df["REVIEW"] = df["REVIEW"].str.replace('[^\w\s]', '')
+df["REVIEW"] = df["REVIEW"].str.replace('\d', '')

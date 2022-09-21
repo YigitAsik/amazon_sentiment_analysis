@@ -85,6 +85,8 @@ df["REVIEW"][0:10].apply(lambda x: sia.polarity_scores(x)["compound"])
 
 # df["POLARITY_SCORE"] = df["REVIEW"].apply(lambda x: sia.polarity_scores(x)["compound"])
 
-## Binarizing the labels
+## Binarizing
 df["SENTIMENT_LABEL"] = df["REVIEW"].apply(lambda x: "pos" if sia.polarity_scores(x)["compound"] > 0 else "neg")
+
+df["SENTIMENT_LABEL"] = LabelEncoder().fit_transform(df["SENTIMENT_LABEL"])
 

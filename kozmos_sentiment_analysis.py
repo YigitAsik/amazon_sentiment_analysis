@@ -30,3 +30,8 @@ df["REVIEW"] = df["REVIEW"].str.lower()
 # Getting rid of punctuations and digits
 df["REVIEW"] = df["REVIEW"].str.replace('[^\w\s]', '')
 df["REVIEW"] = df["REVIEW"].str.replace('\d', '')
+
+# Stop Words
+sw = stopwords.words("english")
+df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in str(x).split() if x not in sw))
+

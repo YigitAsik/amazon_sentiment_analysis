@@ -40,3 +40,5 @@ temp_df = pd.Series(' '.join(df["REVIEW"]).split()).value_counts()
 drops = temp_df[temp_df < 1000]
 df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join(x for x in x.split() if x not in drops))
 
+# Lemmatization
+df["REVIEW"] = df["REVIEW"].apply(lambda x: " ".join([Word(word).lemmatize() for word in x.split()]))

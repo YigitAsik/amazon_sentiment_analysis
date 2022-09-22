@@ -91,11 +91,14 @@ df["SENTIMENT_LABEL"] = df["REVIEW"].apply(lambda x: "pos" if sia.polarity_score
 
 df["SENTIMENT_LABEL"] = LabelEncoder().fit_transform(df["SENTIMENT_LABEL"])
 
-y = df["SENTIMENT_LABEL"]
-X = df["REVIEW"]
-
 ## Splitting
-len(df)
+
 X_train, X_test, y_train, y_test = train_test_split(df["REVIEW"], df["SENTIMENT_LABEL"],
                                                     test_size=0.2, stratify=df.SENTIMENT_LABEL,
                                                     random_state=26)
+## Text Vectorizing
+
+tf_idf_word_vectorizer = TfidfVectorizer()
+X_train_tf_idf_word = tf_idf_word_vectorizer.fit_transform(X_train)
+X_test_tf_idf_word = tf_idf_word_vectorizer.fit_transform(X_test)
+

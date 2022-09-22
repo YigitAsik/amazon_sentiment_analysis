@@ -10,6 +10,7 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, GridSearchCV, cross_validate, train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, plot_confusion_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from textblob import Word, TextBlob
@@ -102,3 +103,18 @@ tf_idf_word_vectorizer = TfidfVectorizer()
 X_train_tf_idf_word = tf_idf_word_vectorizer.fit_transform(X_train)
 X_test_tf_idf_word = tf_idf_word_vectorizer.fit_transform(X_test)
 
+## Modelling (Recheck, maybe there is data leakage somewhere. It looks "unbelievably good")
+from sklearn.metrics import classification_report
+
+lr = LogisticRegression(random_state=26, class_weight="balanced").fit(X_train_tf_idf_word, y_train)
+
+y_pred = lr.predict(X_test_tf_idf_word)
+
+report = classification_report(y_test, y_pred)
+print(report)
+
+
+fig = plt.figure(figsize=(9, 9))
+g = fig.add_subplot(1,1,1)
+plot_confusion_matrix(lr, X_test_tf_idf_word, y_test, ax=g)
+plt.show()
